@@ -13,25 +13,6 @@ let
     mkdir -p $out/share/icons
     ln -s ${pkgs.adwaita-icon-theme}/share/icons/Adwaita $out/share/icons/default
   '';
-
-  # Helper to build a simple graphical-session user service.
-  mkGraphicalSessionService = name: { description, execStart }: {
-    enable = true;
-    inherit description;
-
-    unitConfig = {
-      PartOf = [ "graphical-session.target" ];
-      After = [ "graphical-session.target" ];
-      Requisite = [ "graphical-session.target" ];
-    };
-
-    serviceConfig = {
-      ExecStart = execStart;
-      Restart = "on-failure";
-    };
-
-    wantedBy = [ "graphical-session.target" ];
-  };
 in
 {
   options.desktop.tilingWmBase = {
@@ -47,7 +28,6 @@ in
   config = mkIf cfg.enable {
     display.greetd.enable = true;
     desktop.standaloneGnomeSuite.enable = true;
-
     security.polkit.enable = true;
 
     environment.systemPackages =
@@ -55,9 +35,7 @@ in
       [
         adwaitaCursorTheme
         foot
-        libnotify
         pwvucontrol
-        wl-clip-persist
         wl-clipboard
       ]
       ++ optionals cfg.screenshot.enable [
@@ -71,13 +49,5 @@ in
       nerd-fonts.adwaita-mono
       adwaita-fonts
     ];
-
-    # services
-    systemd.user.services = {
-      wl-clip-persist = mkGraphicalSessionService "wl-clip-persist" {
-        description = "Persist Wayland clipboard";
-        execStart = "${pkgs.wl-clip-persist}/bin/wl-clip-persist --clipboard regular";
-      };
-    };
   };
 }
