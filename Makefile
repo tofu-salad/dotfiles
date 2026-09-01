@@ -1,12 +1,13 @@
 .DEFAULT_GOAL := help
 
-.PHONY: help laptop desktop homelab vm \
+.PHONY: help home laptop desktop homelab vm \
         update/stable update/unstable \
         update/emby-flake update/all \
 	format
 
 help:
 	@echo "Available commands:"
+	@echo "  make home                - Build home-manager setup (tofu)"
 	@echo "  make desktop             - Rebuild system for desktop"
 	@echo "  make homelab             - Rebuild system for homelab"
 	@echo "  make laptop              - Rebuild system for laptop"
@@ -20,6 +21,9 @@ help:
 	@echo "  make format  	           - Format nix files"
 format:
 	find . -name '*.nix' -not -path './.git/*' -exec nix fmt {} +
+# home
+home:
+	home-manager switch --flake .#tofu
 # hosts
 laptop:
 	sudo nixos-rebuild switch --flake .#laptop
@@ -34,13 +38,13 @@ vm:
 
 # updates
 update/stable:
-	sudo nix flake update nixpkgs
+	nix flake update nixpkgs
 
 update/unstable:
-	sudo nix flake update nixpkgs-unstable
+	nix flake update nixpkgs-unstable
 
 update/emby-flake:
 	nix flake update emby-flake
 
 update/all:
-	sudo nix flake update
+	nix flake update

@@ -1,1 +1,8 @@
 .direnv/
+
+# nix build outputs
+/result
+/result-*
+
+# editor/OS noise
+.DS_Store

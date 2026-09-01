@@ -13,11 +13,16 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     emby-flake.url = "github:tofu-salad/emby-server-flake";
+    home-manager = {
+      url = "github:nix-community/home-manager/release-26.05";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
     {
       emby-flake,
+      home-manager,
       nixpkgs,
       self,
       ...
@@ -35,24 +40,42 @@
         };
     in
     {
-      overlays = import ./overlays { inherit inputs; };
+      overlays = import ./nix/overlays { inherit inputs; };
       formatter.${system} = nixpkgs.legacyPackages.${system}.nixfmt;
       nixosConfigurations = {
         desktop = mkHost [
-          ./modules
-          ./hosts/desktop
+          home-manager.nixosModules.home-manager
+          ./nix/home
+          ./nix/hosts/common.nix
+          ./nix/modules
+          ./nix/hosts/desktop
         ];
         homelab = mkHost [
-          ./hosts/homelab
+          ./nix/hosts/common.nix
+          ./nix/hosts/homelab
           emby-flake.nixosModules.default
         ];
         laptop = mkHost [
-          ./modules
-          ./hosts/laptop
+          home-manager.nixosModules.home-manager
+          ./nix/home
+          ./nix/hosts/common.nix
+          ./nix/modules
+          ./nix/hosts/laptop
         ];
         vm = mkHost [
-          ./modules
-          ./hosts/vm
+          home-manager.nixosModules.home-manager
+          ./nix/home
+          ./nix/hosts/common.nix
+          ./nix/hosts/vm
+        ];
+      };
+      homeConfigurations.tofu = home-manager.lib.homeManagerConfiguration {
+        pkgs = import nixpkgs {
+          inherit system;
+          config.allowUnfree = true;
+        };
+        modules = [
+          ./nix/home/tofu
         ];
       };
     };
