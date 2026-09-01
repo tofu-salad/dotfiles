@@ -38,7 +38,6 @@ in
 
       adwaita-qt
       adwaita-qt6
-      adwaita-fonts
       adwaita-icon-theme
       adwaita-icon-theme-legacy
     ];

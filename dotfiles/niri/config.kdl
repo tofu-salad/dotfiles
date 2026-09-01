@@ -80,8 +80,8 @@ window-rule {
 // Binds
 
 binds {
-        Mod+Return hotkey-overlay-title="Open a Terminal" { spawn "ghostty" "+new-window"; }
-        Mod+D      hotkey-overlay-title="Run Application" { spawn "fuzzel"; }
+        Mod+D hotkey-overlay-title="App Launcher: Toggle" { spawn "dms" "ipc" "call" "spotlight" "toggle"; }
+        Mod+Return hotkey-overlay-title="Foot terminal" { spawn "foot"; }
         Mod+Shift+S hotkey-overlay-title="Screenshot Area" { spawn-sh "grim -g \"$(slurp)\" - | satty -f -"; }
         Mod+Shift+P hotkey-overlay-title="Colorpicker"    { spawn-sh "hyprpicker | wl-copy"; }
 

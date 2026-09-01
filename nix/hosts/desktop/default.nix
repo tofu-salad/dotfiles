@@ -8,18 +8,7 @@
     ./services.nix
   ];
 
-  desktop.gnome = {
-    enable = true;
-    extensions = {
-      enable = true;
-      packages = with pkgs.gnomeExtensions; [
-        appindicator
-        blur-my-shell
-        caffeine
-        paperwm
-      ];
-    };
-  };
+  desktop.niri.enable = true;
   screenCastOBS.enable = true;
   virt = {
     enable = true;

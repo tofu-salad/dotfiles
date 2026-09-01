@@ -21,16 +21,19 @@ let
     ".tmux.conf"
   ];
 
-  mkSymlink = recursive: name: {
-    source = config.lib.file.mkOutOfStoreSymlink
-      "${repoDotfiles}/${name}";
-    inherit recursive;
+  mkSymlink = recursive: force: name: {
+    source = config.lib.file.mkOutOfStoreSymlink "${repoDotfiles}/${name}";
+    inherit recursive force;
   };
 
-  links = mk: names: builtins.listToAttrs (map (name: {
-    name = name;
-    value = mk name;
-  }) names);
+  links =
+    mk: names:
+    builtins.listToAttrs (
+      map (name: {
+        name = name;
+        value = mk name;
+      }) names
+    );
 in
 
 {
@@ -75,7 +78,15 @@ in
     tmux
   ];
 
-  home.file = links (mkSymlink false) files;
+  home.file =
+    (links (mkSymlink false false) files)
+    // {
+      "Pictures/wallpapers" = {
+        source = config.lib.file.mkOutOfStoreSymlink
+          "${config.home.homeDirectory}/dotfiles/wallpapers";
+        recursive = true;
+      };
+    };
 
-  xdg.configFile = links (mkSymlink true) configs;
+  xdg.configFile = links (mkSymlink true true) configs;
 }
