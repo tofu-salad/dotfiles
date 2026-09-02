@@ -1,5 +1,6 @@
 {
   config,
+  lib,
   pkgs,
   ...
 }:
@@ -38,8 +39,8 @@ in
 
 {
   home = {
-    username = "tofu";
-    homeDirectory = "/home/tofu";
+    username = lib.mkDefault "tofu";
+    homeDirectory = lib.mkDefault "/home/${config.home.username}";
     stateVersion = "26.05";
   };
 
