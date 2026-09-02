@@ -28,6 +28,7 @@ function tmux-sessionizer
     # No tmux server and we're not already inside tmux.
     if not set -q TMUX; and not tmux has-session 2>/dev/null
         tmux new-session -s "$selected_name" -c "$selected"
+        commandline -f repaint
         return 0
     end
 
@@ -41,6 +42,7 @@ function tmux-sessionizer
         tmux switch-client -t "$selected_name"
     else
         tmux attach-session -t "$selected_name"
+        commandline -f repaint
     end
 end
 
