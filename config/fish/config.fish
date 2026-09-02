@@ -5,3 +5,5 @@ end
 if command -q nvim
     alias vim nvim
 end
+
+bind \cf tmux-sessionizer

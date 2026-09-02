@@ -5,8 +5,7 @@ if [[ $# -eq 1 ]]; then
 else
 	selected=$(
 		(
-			find ~/Code ~/Code/Github ~/Diego/Code -mindepth 1 -maxdepth 1 -type d 2>/dev/null
-			echo ~/.dotfiles/.config/nvim
+			find ~/Code ~/Projects -mindepth 1 -maxdepth 1 -type d 2>/dev/null
 			) | fzf
 		)
 fi

@@ -5,7 +5,7 @@
 }:
 
 let
-  repoDotfiles = "${config.home.homeDirectory}/dotfiles/dotfiles";
+  repoDotfiles = "${config.home.homeDirectory}/dotfiles/config";
 
   configs = [
     "fish"

@@ -6,3 +6,6 @@
 
 # editor/OS noise
 .DS_Store
+
+# dms-shell auto-generated niri config fragments
+/config/niri/dms/
