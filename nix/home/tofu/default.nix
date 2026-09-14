@@ -79,15 +79,12 @@ in
     tmux
   ];
 
-  home.file =
-    (links (mkSymlink false false) files)
-    // {
-      "Pictures/wallpapers" = {
-        source = config.lib.file.mkOutOfStoreSymlink
-          "${config.home.homeDirectory}/dotfiles/wallpapers";
-        recursive = true;
-      };
+  home.file = (links (mkSymlink false false) files) // {
+    "Pictures/wallpapers" = {
+      source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/wallpapers";
+      recursive = true;
     };
+  };
 
   xdg.configFile = links (mkSymlink true true) configs;
 }

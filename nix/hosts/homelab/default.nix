@@ -1,17 +1,45 @@
 {
+  config,
   pkgs,
   ...
 }:
-
 {
   imports = [
     ./hardware-configuration.nix
+    ./minecraft.nix
   ];
+  # emby
+  services.emby = {
+    enable = true;
+    openFirewall = true;
+  };
+  users.groups.media = {
+    gid = 1000;
+  };
+  users.users.emby.extraGroups = [ "media" ];
+  system.activationScripts.mediaAcl = {
+    text = ''
+      echo "Setting ACLs on /mnt/share ..."
+      ${pkgs.acl}/bin/setfacl -R -m g:media:rwX /mnt/share
+      ${pkgs.acl}/bin/setfacl -R -m d:g:media:rwX /mnt/share
+    '';
+  };
 
-  services.logind.settings.Login = {
-    HandleLidSwitch = "ignore";
-    HandleLidSwitchExternalPower = "ignore";
-    HandleLidSwitchDocked = "ignore";
+  # nfs
+  fileSystems."/export" = {
+    device = "/mnt/share";
+    fsType = "none";
+    options = [ "bind" ];
+  };
+  services.nfs.server = {
+    enable = true;
+    lockdPort = 4001;
+    mountdPort = 4002;
+    statdPort = 4000;
+    exports = ''
+      /export  100.64.0.0/10(rw,fsid=0,no_subtree_check,insecure,all_squash,anonuid=${toString config.users.users.tofu.uid},anongid=${toString config.users.groups.media.gid})
+      /export  192.168.0.0/24(rw,fsid=0,no_subtree_check,insecure,all_squash,anonuid=${toString config.users.users.tofu.uid},anongid=${toString config.users.groups.media.gid})
+    '';
   };
 
   services.fail2ban.enable = true;
@@ -23,35 +51,7 @@
       KbdInteractiveAuthentication = false;
     };
   };
-  services.samba = {
-    enable = true;
-    openFirewall = true;
-    settings = {
-      global = {
-        "workgroup" = "WORKGROUP";
-        "server string" = "smbnix";
-        "netbios name" = "smbnix";
-        "security" = "user";
-        "hosts allow" = "192.168.0. 127.0.0.1 localhost";
-        "hosts deny" = "0.0.0.0/0";
-        "guest account" = "nobody";
-        "map to guest" = "bad user";
-      };
-      "share" = {
-        "path" = "/mnt/share";
-        "browseable" = "yes";
-        "read only" = "no";
-        "create mask" = "0644";
-        "directory mask" = "0755";
-        "force user" = "tofu";
-        "force group" = "media";
-      };
-    };
-  };
-  services.samba-wsdd = {
-    enable = true;
-    openFirewall = true;
-  };
+
   services.avahi = {
     publish.enable = true;
     publish.userServices = true;
@@ -67,7 +67,6 @@
       port = 13378;
       host = "0.0.0.0";
     };
-    emby.enable = true;
   };
 
   services.tailscale.enable = true;
@@ -79,15 +78,26 @@
       22 # OpenSSH
       80 # HTTP
       443 # HTTPS
-      8096 # Emby
+
+      111 # NFS
+      2049 # NFS
+      4000 # NFS
+      4001 # NFS
+      4002 # NFS
     ];
-    allowedUDPPorts = [ ];
+    allowedUDPPorts = [
+      111 # NFS
+      2049 # NFS
+      4000 # NFS
+      4001 # NFS
+      4002 # NFS
+    ];
   };
 
-  users.groups.media = { };
-  users.users.emby.extraGroups = [ "media" ];
   users.users.tofu = {
     linger = true;
+    uid = 1000;
+
     isNormalUser = true;
     description = "tofu salad homelab config";
     extraGroups = [
@@ -108,16 +118,15 @@
     timeout = 0;
   };
 
-  system.activationScripts.mediaAcl = {
-    text = ''
-      echo "Setting ACLs on /mnt/share ..."
-      ${pkgs.acl}/bin/setfacl -R -m g:media:rwX /mnt/share
-      ${pkgs.acl}/bin/setfacl -R -m d:g:media:rwX /mnt/share
-    '';
-  };
-
   environment.systemPackages = with pkgs; [
     gh
+    git
+    gnumake
+    nixfmt-tree
+    tmux
+    tree
+    vim
+    btop
   ];
 
   system.stateVersion = "26.05";
