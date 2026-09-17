@@ -1,12 +1,8 @@
 {
-  config,
   pkgs,
-  inputs,
-  lib,
   ...
 }:
 let
-  inherit (inputs.nix-minecraft.lib) collectFilesAt;
   # ============================================================
   # MODPACKS
   # ============================================================
