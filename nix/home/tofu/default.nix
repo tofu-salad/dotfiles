@@ -61,6 +61,7 @@ in
     tree
     unzip
     wget
+    nixfmt
 
     # archives
     p7zip

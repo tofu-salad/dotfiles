@@ -1,0 +1,31 @@
+window-rule {
+  match app-id="dev.noctalia.Noctalia"
+  open-floating true
+  default-column-width { fixed 1080; }
+  default-window-height { fixed 920; }
+}
+
+window-rule {
+        clip-to-geometry true
+}
+
+window-rule {
+        match app-id="com.saivert.pwvucontrol"
+        default-column-width  { fixed 560; }
+        default-window-height { fixed 300; }
+        open-floating true
+        default-floating-position x=40 y=2 relative-to="top-right"
+}
+
+// gimp has hard to see borders
+window-rule {
+        match app-id="gimp"
+        shadow {
+                on
+                softness 9
+                spread 1
+                offset x=0 y=3
+                color          "#00000059"
+                inactive-color "#00000026"
+        }
+}
