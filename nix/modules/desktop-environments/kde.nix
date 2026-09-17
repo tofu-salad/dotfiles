@@ -27,8 +27,13 @@ in
     ];
 
     environment.systemPackages = with pkgs; [
-      kitty
+      foot
       wl-clipboard
+    ];
+
+    fonts.packages = with pkgs; [
+      nerd-fonts.adwaita-mono
+      adwaita-fonts
     ];
   };
 }
