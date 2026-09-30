@@ -8,6 +8,7 @@
     ./hardware-configuration.nix
     ./minecraft.nix
   ];
+  programs.direnv.enable = true;
   # emby
   services.emby = {
     enable = true;
@@ -125,8 +126,10 @@
     nixfmt-tree
     tmux
     tree
-    vim
     btop
+
+    tree-sitter
+    neovim
   ];
 
   system.stateVersion = "26.05";
