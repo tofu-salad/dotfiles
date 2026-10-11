@@ -14,10 +14,6 @@ in
   config = mkIf cfg.enable {
     display.manager = "greetd";
     programs.hyprland.enable = true;
-    programs.noctalia = {
-      enable = true;
-      recommendedServices.enable = true;
-    };
 
     security.polkit.enable = true;
 
