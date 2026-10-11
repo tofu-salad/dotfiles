@@ -47,6 +47,12 @@ in
   programs.home-manager.enable = true;
   programs.direnv.enable = true;
 
+  home.pointerCursor = {
+    name = "Adwaita";
+    package = pkgs.adwaita-icon-theme;
+    size = 24;
+  };
+
   home.packages = with pkgs; [
     # cli
     btop

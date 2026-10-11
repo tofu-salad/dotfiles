@@ -7,7 +7,6 @@
   imports = [
     ./hardware-configuration.nix
     ./minecraft.nix
-    ./tailscale.nix
   ];
   programs.direnv.enable = true;
   # emby
@@ -54,13 +53,14 @@
     };
   };
 
-  services.avahi = {
-    publish.enable = true;
-    publish.userServices = true;
-    nssmdns4 = true;
-    enable = true;
-    openFirewall = true;
-  };
+  # tailscale
+  services.tailscale.enable = true;
+  networking.nftables.enable = true;
+  systemd.services.tailscaled.serviceConfig.Environment = [
+    "TS_DEBUG_FIREWALL_MODE=nftables"
+  ];
+  systemd.network.wait-online.enable = false;
+  boot.initrd.systemd.network.wait-online.enable = false;
 
   # apps
   services = {
@@ -87,14 +87,13 @@
 
   networking = {
     hostName = "homelab";
-    networkmanager.enable = true;
   };
 
   networking.firewall = {
     enable = true;
     allowPing = true;
+    trustedInterfaces = [ config.services.tailscale.interfaceName ];
     allowedTCPPorts = [
-      22 # OpenSSH
       80 # HTTP
       443 # HTTPS
 
@@ -105,6 +104,7 @@
       4002 # NFS
     ];
     allowedUDPPorts = [
+      config.services.tailscale.port
       111 # NFS
       2049 # NFS
       4000 # NFS

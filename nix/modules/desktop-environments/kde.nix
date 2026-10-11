@@ -12,10 +12,7 @@ in
 {
   options.desktop.kde.enable = mkEnableOption "KDE";
   config = mkIf cfg.enable {
-    services.displayManager.sddm = {
-      enable = true;
-      wayland.enable = true;
-    };
+    display.manager = "sddm";
     services.desktopManager.plasma6.enable = true;
 
     environment.plasma6.excludePackages = with pkgs.kdePackages; [

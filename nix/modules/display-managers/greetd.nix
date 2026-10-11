@@ -5,15 +5,8 @@
   ...
 }:
 with lib;
-let
-  cfg = config.display.greetd;
-in
 {
-  options.display.greetd = {
-    enable = mkEnableOption "greetd display manager";
-  };
-
-  config = mkIf cfg.enable {
+  config = mkIf (config.display.manager == "greetd") {
     services.greetd = {
       enable = true;
       useTextGreeter = true;

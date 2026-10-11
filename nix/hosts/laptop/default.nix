@@ -11,20 +11,8 @@
 
   desktop.kde.enable = true;
 
-  users.users.tofu = {
-    isNormalUser = true;
-    description = "laptop";
-    extraGroups = [
-      "networkmanager"
-      "wheel"
-    ];
-  };
-
   i18n.defaultLocale = lib.mkForce "es_ES.UTF-8";
-  networking = {
-    hostName = "laptop";
-    networkmanager.enable = true;
-  };
+  networking.hostName = "laptop";
 
   # windows fonts
   fonts.packages = with pkgs; [
@@ -33,24 +21,13 @@
   ];
 
   environment.sessionVariables = {
-    NIXOS_OZONE_WL = "1";
     GSK_RENDERER = "gl";
     LIBVA_DRIVER_NAME = "i965";
   };
 
   environment.systemPackages = with pkgs; [
-    # browsers
-    google-chrome
-    unstable.brave-origin
-    stremio-linux-shell
-
-    # media
-    localsend
-    mpv
-
     # gui
     libreoffice
-    qbittorrent
   ];
 
   boot = {
@@ -62,26 +39,12 @@
       "splash"
       "boot.shell_on_fail"
     ];
-    loader = {
-      timeout = 0;
-      systemd-boot = {
-        enable = true;
-        configurationLimit = 3;
-      };
-      efi.canTouchEfiVariables = true;
-    };
+    loader.timeout = 0;
   };
 
-  fileSystems."/".options = [ "noatime" ];
-  services.fstrim.enable = true;
-
-  zramSwap.enable = true;
-  hardware.graphics = {
-    enable = true;
-    extraPackages = with pkgs; [
-      intel-vaapi-driver
-    ];
-  };
+  hardware.graphics.extraPackages = with pkgs; [
+    intel-vaapi-driver
+  ];
   hardware.bluetooth.enable = true;
 
   virt = {

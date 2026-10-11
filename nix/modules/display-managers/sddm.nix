@@ -10,8 +10,6 @@ let
 in
 {
   options.display.sddm = {
-    enable = mkEnableOption "sddm display manager";
-
     theme = mkOption {
       type = types.str;
       default = "where_is_my_sddm_theme";
@@ -34,7 +32,7 @@ in
     };
   };
 
-  config = mkIf (cfg.enable && !config.services.displayManager.gdm.enable) {
+  config = mkIf (config.display.manager == "sddm") {
     services.displayManager.sddm = {
       enable = true;
       wayland.enable = cfg.wayland.enable;

@@ -1,6 +1,11 @@
-{ outputs, ... }:
+{
+  outputs,
+  ...
+}:
 
 {
+  networking.networkmanager.enable = true;
+
   time = {
     hardwareClockInLocalTime = false;
     timeZone = "America/Argentina/Cordoba";

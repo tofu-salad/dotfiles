@@ -20,7 +20,6 @@
   boot.loader.grub.useOSProber = true;
 
   networking.hostName = "vm";
-  networking.networkmanager.enable = true;
   users.users.tofu = {
     isNormalUser = true;
     description = "tofu";

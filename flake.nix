@@ -59,6 +59,8 @@
           ./nix/hosts/desktop
         ];
         homelab = mkHost [
+          home-manager.nixosModules.home-manager
+          ./nix/home/homelab.nix
           ./nix/hosts/common.nix
           ./nix/hosts/homelab
           emby-flake.nixosModules.default

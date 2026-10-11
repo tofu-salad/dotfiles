@@ -21,6 +21,14 @@ with lib;
         };
         gpuPass = {
           enable = mkEnableOption "GPU passthrough";
+          iommu = mkOption {
+            type = types.enum [
+              "intel"
+              "amd"
+            ];
+            default = "intel";
+            description = "IOMMU vendor for the kernel param (intel_iommu=on / amd_iommu=on)";
+          };
           gpu = mkOption {
             type = types.str;
             description = "gpu id example (1002:67df,1002:aaf0)";
@@ -53,7 +61,7 @@ with lib;
         "vfio_iommu_type1"
       ];
       boot.kernelParams = [
-        "intel_iommu=on"
+        "${config.virt.virt-manager.gpuPass.iommu}_iommu=on"
       ];
       boot.extraModprobeConfig = ''
         softdep drm pre: vfio-pci

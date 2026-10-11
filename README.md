@@ -9,14 +9,15 @@ flake.nix                  # flake entry point (system + home)
 nix/
   home/
     default.nix            # NixOS wiring for home-manager
+    homelab.nix            # slim home-manager wiring for the homelab
     tofu/default.nix       # portable user config (works standalone)
   hosts/
-    common.nix             # shared NixOS plumbing (time, locale, nix, overlays)
-    desktop/               # GNOME system
+    common.nix             # shared NixOS plumbing (time, locale, nix, networking, overlays)
+    desktop/               # niri+tiling WM system
     laptop/                # KDE system
     vm/                    # i3 VM
-    homelab/               # headless server (no home-manager)
-  modules/                 # optional system modules (desktop, display, gaming...)
+    homelab/               # headless server (home-manager + fish)
+  modules/                 # optional system modules (desktop, display, gaming, workstation...)
   overlays/                # unstable-packages overlay
 dotfiles/                  # home configs symlinked by home-manager
 ```
@@ -33,11 +34,12 @@ cd ~/dotfiles
 make desktop    # or: make laptop / make vm / make homelab
 ```
 
-`make homelab` stays a plain `nixos-rebuild` — that host has no home-manager.
+`make homelab` includes home-manager too — it applies the slim `nix/home/homelab.nix`
+profile (fish + CLI tools) alongside the system config.
 
 ## home-manager
 
-`nix/home/tofu/default.nix` is the user config: packages, fish/direnv, and
+`nix/home/tofu/default.nix` is the desktop user config: packages, fish/direnv, and
 symlinks into `dotfiles/` via `mkOutOfStoreSymlink` (edit files, no rebuild
 needed). Applied automatically on desktop/laptop/vm rebuilds. It is portable
 and can be used outside NixOS (any distro with Nix + flakes):

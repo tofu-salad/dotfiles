@@ -5,5 +5,6 @@
     ./gaming.nix
     ./screencast-obs.nix
     ./virt.nix
+    ./workstation.nix
   ];
 }
