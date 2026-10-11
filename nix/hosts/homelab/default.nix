@@ -7,6 +7,7 @@
   imports = [
     ./hardware-configuration.nix
     ./minecraft.nix
+    ./tailscale.nix
   ];
   programs.direnv.enable = true;
   # emby
@@ -60,6 +61,7 @@
     enable = true;
     openFirewall = true;
   };
+
   # apps
   services = {
     audiobookshelf = {
@@ -70,8 +72,24 @@
     };
   };
 
-  services.tailscale.enable = true;
-  networking.nftables.enable = true;
+  users.users.tofu = {
+    linger = true;
+    uid = 1000;
+
+    isNormalUser = true;
+    description = "tofu salad homelab config";
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+      "media"
+    ];
+  };
+
+  networking = {
+    hostName = "homelab";
+    networkmanager.enable = true;
+  };
+
   networking.firewall = {
     enable = true;
     allowPing = true;
@@ -93,24 +111,7 @@
       4001 # NFS
       4002 # NFS
     ];
-  };
 
-  users.users.tofu = {
-    linger = true;
-    uid = 1000;
-
-    isNormalUser = true;
-    description = "tofu salad homelab config";
-    extraGroups = [
-      "networkmanager"
-      "wheel"
-      "media"
-    ];
-  };
-
-  networking = {
-    hostName = "homelab";
-    networkmanager.enable = true;
   };
   zramSwap.enable = true;
   boot.loader = {
