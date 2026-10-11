@@ -12,75 +12,42 @@ in
 {
   options.desktop.hyprland.enable = mkEnableOption "Hyprland";
   config = mkIf cfg.enable {
-    display.manager = "greetd";
-    programs.hyprland.enable = true;
-
-    security.polkit.enable = true;
-
-    programs.dconf.enable = true;
-    programs.dconf.profiles.user.databases = [
-      {
-        lockAll = true;
-        settings = {
-          "org/gnome/desktop/interface" = {
-            color-scheme = "prefer-dark";
-          };
-        };
-      }
-    ];
-    services.gnome.gnome-keyring.enable = true;
-    services.gvfs.enable = true;
-    services.udisks2.enable = true;
-    services.gnome.localsearch.enable = true;
-
-    qt = {
+    display.manager = "sddm";
+    programs.hyprland = {
       enable = true;
-      platformTheme = "qt5ct";
+      withUWSM = true;
     };
-
-    systemd.user.services.polkit-gnome-authentication-agent-1 = {
-      description = "polkit-gnome-authentication-agent-1";
-      wantedBy = [ "graphical-session.target" ];
-      wants = [ "graphical-session.target" ];
-      after = [ "graphical-session.target" ];
-      serviceConfig = {
-        Type = "simple";
-        ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
-        Restart = "on-failure";
-        RestartSec = 1;
-        TimeoutStopSec = 10;
-      };
-    };
-
     environment.systemPackages = with pkgs; [
       foot
-      pwvucontrol
-      wl-clipboard
+      kitty
 
-      nautilus
-      baobab
-      file-roller
-      loupe
-      papers
-
-      gnome-calculator
-      gnome-characters
-      gnome-font-viewer
-      gnome-text-editor
-      gnome-disk-utility
-      libsForQt5.qt5ct
-
-      adwaita-qt
-      adwaita-qt6
-      adwaita-icon-theme
-      adwaita-icon-theme-legacy
-
-      grim
-      hyprpicker
-      satty
-      slurp
+      hyprpaper
+      hyprlauncher
+      mako
+      hyprpolkitagent
+      waybar
     ];
 
+    systemd.user.services.mako = {
+      description = "mako notification daemon";
+      wantedBy = [ "graphical-session.target" ];
+      partOf = [ "graphical-session.target" ];
+      after = [ "graphical-session.target" ];
+      serviceConfig = {
+        ExecStart = "${pkgs.mako}/bin/mako";
+        Restart = "on-failure";
+      };
+    };
+    systemd.user.services.hyprpaper = {
+      description = "hyprpaper";
+      wantedBy = [ "graphical-session.target" ];
+      partOf = [ "graphical-session.target" ];
+      after = [ "graphical-session.target" ];
+      serviceConfig = {
+        ExecStart = "${pkgs.hyprpaper}/bin/hyprpaper";
+        Restart = "on-failure";
+      };
+    };
     fonts.packages = with pkgs; [
       nerd-fonts.adwaita-mono
       adwaita-fonts
