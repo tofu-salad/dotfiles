@@ -25,9 +25,8 @@ dotfiles/                  # home configs symlinked by home-manager
 ## usage
 
 1. clone the repo.
-2. replace the `hardware-configuration.nix` inside `nix/hosts/<host>/` with the
-   one generated for that machine.
-3. rebuild:
+2. rebuild — each `make <host>` regenerates the machine's `hardware-configuration.nix`
+   via `nixos-generate-config --show-hardware-config` (gitignored) before rebuilding:
 
 ```sh
 cd ~/dotfiles

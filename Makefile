@@ -25,15 +25,21 @@ format:
 home:
 	home-manager switch --flake .#tofu
 # hosts
+# regenerate the machine's hardware-configuration.nix, then rebuild
 laptop:
+	nixos-generate-config --show-hardware-config > nix/hosts/laptop/hardware-configuration.nix
 	sudo nixos-rebuild switch --flake .#laptop
 
 desktop:
+	nixos-generate-config --show-hardware-config > nix/hosts/desktop/hardware-configuration.nix
 	sudo nixos-rebuild switch --flake .#desktop
 
 homelab:
+	nixos-generate-config --show-hardware-config > nix/hosts/homelab/hardware-configuration.nix
 	sudo nixos-rebuild switch --flake .#homelab
+
 vm:
+	nixos-generate-config --show-hardware-config > nix/hosts/vm/hardware-configuration.nix
 	sudo nixos-rebuild switch --flake .#vm
 
 # updates
