@@ -13,7 +13,7 @@
       ...
     }:
     let
-      repoDotfiles = "${config.home.homeDirectory}/dotfiles/config";
+      repoDotfiles = "${config.home.homeDirectory}/dotfiles/dots";
 
       configs = [
         "fish"

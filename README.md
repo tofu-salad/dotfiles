@@ -19,14 +19,15 @@ nix/
     homelab/               # headless server (home-manager + fish)
   modules/                 # optional system modules (desktop, display, gaming, workstation...)
   overlays/                # unstable-packages overlay
-dotfiles/                  # home configs symlinked by home-manager
+dots/                      # home configs symlinked by home-manager (fish, foot, mpv, niri, nvim)
 ```
 
 ## usage
 
 1. clone the repo.
 2. rebuild — each `make <host>` regenerates the machine's `hardware-configuration.nix`
-   via `nixos-generate-config --show-hardware-config` (gitignored) before rebuilding:
+   via `nixos-generate-config --show-hardware-config` (tracked, so flakes can see it)
+   before rebuilding:
 
 ```sh
 cd ~/dotfiles
@@ -39,7 +40,7 @@ profile (fish + CLI tools) alongside the system config.
 ## home-manager
 
 `nix/home/tofu/default.nix` is the desktop user config: packages, fish/direnv, and
-symlinks into `dotfiles/` via `mkOutOfStoreSymlink` (edit files, no rebuild
+symlinks into `dots/` via `mkOutOfStoreSymlink` (edit files, no rebuild
 needed). Applied automatically on desktop/laptop/vm rebuilds. It is portable
 and can be used outside NixOS (any distro with Nix + flakes):
 

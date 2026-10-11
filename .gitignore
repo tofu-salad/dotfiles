@@ -8,7 +8,4 @@
 .DS_Store
 
 # dms-shell auto-generated niri config fragments
-/config/niri/dms/
-
-# machine-generated hardware config (regen via `nixos-generate-config --show-hardware-config`)
-/nix/hosts/*/hardware-configuration.nix
+/dots/niri/dms/
