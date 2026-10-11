@@ -80,6 +80,8 @@
           home-manager.nixosModules.home-manager
           ./nix/home
           ./nix/hosts/common.nix
+          ./nix/modules/desktop-environments
+          ./nix/modules/display-managers
           ./nix/hosts/vm
         ];
       };

@@ -15,7 +15,7 @@ nix/
     common.nix             # shared NixOS plumbing (time, locale, nix, networking, overlays)
     desktop/               # niri+tiling WM system
     laptop/                # KDE system
-    vm/                    # i3 VM
+    vm/                    # Hyprland VM (autologin)
     homelab/               # headless server (home-manager + fish)
   modules/                 # optional system modules (desktop, display, gaming, workstation...)
   overlays/                # unstable-packages overlay

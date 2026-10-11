@@ -12,7 +12,7 @@ with lib;
       useTextGreeter = true;
       settings = {
         default_session = {
-          command = ''
+          command = mkDefault ''
             ${pkgs.tuigreet}/bin/tuigreet \
             --time --remember --remember-session
           '';

@@ -1,4 +1,5 @@
 {
+  lib,
   pkgs,
   ...
 }:
@@ -7,33 +8,42 @@
     ./hardware-configuration.nix
   ];
 
-  services.xserver.enable = true;
-  services.xserver.windowManager.i3.enable = true;
-  services.xserver.windowManager.i3.extraPackages = [ ];
-  services.xserver.displayManager.lightdm.extraSeatDefaults = "autologin-user=tofu";
+  desktop.hyprland.enable = true;
 
-  environment.pathsToLink = [ "/libexec" ];
+  # autologin straight into Hyprland (skip the greeter)
+  services.greetd.settings.default_session = {
+    user = lib.mkForce "tofu";
+    command = ''
+      ${pkgs.bash}/bin/bash -lc "exec ${pkgs.dbus}/bin/dbus-run-session -- ${pkgs.hyprland}/bin/Hyprland"
+    '';
+  };
 
-  boot.loader.timeout = 0;
-  boot.loader.grub.enable = true;
-  boot.loader.grub.device = "/dev/sda";
-  boot.loader.grub.useOSProber = true;
+  environment.sessionVariables.WLR_RENDERER_ALLOW_SOFTWARE = "1";
+
+  boot.loader = {
+    timeout = 0;
+    grub = {
+      enable = true;
+      device = "/dev/sda";
+      useOSProber = true;
+    };
+  };
 
   networking.hostName = "vm";
+  hardware.graphics.enable = true;
+
   users.users.tofu = {
     isNormalUser = true;
     description = "tofu";
     extraGroups = [
       "networkmanager"
       "wheel"
-      "autologin"
     ];
   };
-  hardware.graphics.enable = true;
+
+  environment.pathsToLink = [ "/libexec" ];
   environment.systemPackages = with pkgs; [
-    alacritty
     mako
-    xclip
   ];
 
   system.stateVersion = "26.05";
