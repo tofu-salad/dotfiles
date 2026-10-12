@@ -10,6 +10,7 @@ let
     "kde"
     "hyprland"
     "niri"
+    "sway"
   ];
 in
 {
@@ -19,6 +20,7 @@ in
     ./kde.nix
     ./hyprland.nix
     ./niri.nix
+    ./sway.nix
   ];
 
   assertions = [
@@ -26,7 +28,7 @@ in
       assertion = lib.length enabledDesktops <= 1;
       message = ''
         Multiple desktops enabled: ${lib.concatStringsSep ", " enabledDesktops}.
-        Only one of gnome/kde/hyprland/niri may be enabled.
+        Only one of gnome/kde/hyprland/niri/sway may be enabled.
       '';
     }
   ];

@@ -19,37 +19,54 @@ in
     };
     environment.systemPackages = with pkgs; [
       foot
-      kitty
 
-      hyprpaper
-      hyprlauncher
       mako
-      hyprpolkitagent
       waybar
+      rofi
+      libnotify
+
+      swayidle
+      swaylock
     ];
 
-    systemd.user.services.mako = {
-      description = "mako notification daemon";
+    systemd.user.services.swaybg = {
+      description = "wallpaper";
       wantedBy = [ "graphical-session.target" ];
       partOf = [ "graphical-session.target" ];
       after = [ "graphical-session.target" ];
       serviceConfig = {
-        ExecStart = "${pkgs.mako}/bin/mako";
+        ExecStart = "${pkgs.swaybg}/bin/swaybg -m fill -i '%h/Pictures/wallpapers/minu-phone.png'";
         Restart = "on-failure";
       };
     };
-    systemd.user.services.hyprpaper = {
-      description = "hyprpaper";
-      wantedBy = [ "graphical-session.target" ];
-      partOf = [ "graphical-session.target" ];
-      after = [ "graphical-session.target" ];
-      serviceConfig = {
-        ExecStart = "${pkgs.hyprpaper}/bin/hyprpaper";
-        Restart = "on-failure";
-      };
-    };
+    
+     security.polkit.enable = true;
+     systemd.user.services.polkit-gnome-authentication-agent-1 = {
+       description = "polkit-gnome-authentication-agent-1";
+       wantedBy = [ "graphical-session.target" ];
+       partOf = [ "graphical-session.target" ];
+       after = [ "graphical-session.target" ];
+       serviceConfig = {
+         Type = "simple";
+         ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+         Restart = "on-failure";
+         RestartSec = 1;
+         TimeoutStopSec = 10;
+       };
+     };
+
+     systemd.user.services.swayidle = {
+       description = "swayidle";
+       wantedBy = [ "graphical-session.target" ];
+       partOf = [ "graphical-session.target" ];
+       after = [ "graphical-session.target" ];
+       serviceConfig = {
+         ExecStart = "${pkgs.swayidle}/bin/swayidle -w timeout 300 '${pkgs.swaylock}/bin/swaylock -f' timeout 600 'hyprctl dispatch dmps off' resume 'hyprctl dispatch dmps on' before-sleep '${pkgs.swaylock}/bin/swaylock -f'";
+         Restart = "on-failure";
+       };
+     };
+
     fonts.packages = with pkgs; [
-      nerd-fonts.adwaita-mono
       adwaita-fonts
     ];
   };

@@ -11,9 +11,15 @@ let
   configs = [
     "fish"
     "foot"
+    "hypr"
+    "mako"
     "mpv"
     "niri"
     "nvim"
+    "rofi"
+    "sway"
+    "swaylock"
+    "waybar"
   ];
 
   files = [

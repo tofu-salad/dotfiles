@@ -1,0 +1,34 @@
+{
+        "layer": "top",
+        "modules-left": ["image#search", "sway/workspaces"],
+        "modules-center": ["clock"],
+        "modules-right": ["sway/language", "wireplumber", "network", "tray", "image#power" ],
+        "clock": {
+                "interval": 60,
+                "format": "{:%H:%M}",
+                "tooltip-format": "{:%d-%m-%Y}"
+
+        },
+        "network": {
+                "format-ethernet": "eth",
+                "format-wifi": "wifi",
+                "format-disconnected": "",
+                "tooltip-format-ethernet": "{ifname}",
+                "tooltip-format-wifi": "{essid} ({signalStrength}%)",
+                "tooltip-format-disconnected": "disconnected"
+        },
+        "image#search": {
+                "exec": "$HOME/.config/waybar/scripts/search-icon.sh",
+                "interval": "once",
+                "tooltip": false,
+                "size": 18,
+                "on-click": "rofi -show drun -location 1"
+        },
+        "image#power": {
+                "exec": "$HOME/.config/waybar/scripts/power-icon.sh",
+                "interval": "once",
+                "tooltip": false,
+                "size": 14,
+                "on-click": "$HOME/.config/waybar/scripts/powermenu.sh"
+        }
+}

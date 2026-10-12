@@ -1,0 +1,44 @@
+* {
+   bg: rgba (0, 0, 0, 1);
+   fg: rgba (255, 255, 255, 1);
+   borderColor: rgba (255, 255, 255, 0.25);
+   background-color: @bg;
+
+   text-color: @fg;
+   border-color: @borderColor;
+}
+configuration {
+        hover-select: true;
+        me-select-entry: "";
+        me-accept-entry: "MousePrimary";
+}
+
+window {
+   location: northeast;
+   anchor:   northeast;
+   width: 200px;
+   border: 1px;
+   padding: 4px;
+}
+
+mainbox {
+        children: [ listview ];
+}
+
+listview {
+        columns: 1;
+        lines: 5;
+        fixed-height: true;
+        scrollbar: false;
+        spacing: 4px;
+}
+
+element {
+        orientation: horizontal;
+        spacing: 4px;
+        padding: 4px;
+}
+
+element selected.normal {
+        border: 1px;
+}
