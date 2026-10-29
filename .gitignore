@@ -1,0 +1,11 @@
+.direnv/
+
+# nix build outputs
+/result
+/result-*
+
+# editor/OS noise
+.DS_Store
+
+# dms-shell auto-generated niri config fragments
+/dots/niri/dms/

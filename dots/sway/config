@@ -1,0 +1,33 @@
+set $mod Mod1
+
+set $left h
+set $down j
+set $up k
+set $right l
+
+set $term foot
+set $menu rofi -show drun
+
+output Virtual-1 resolution 1440x960 position 0,0
+
+bindsym $mod+Return exec $term
+bindsym $mod+q kill
+bindsym $mod+shift+c reload
+bindsym $mod+d exec $menu
+
+bindsym $mod+shift+e exec swaynag -t warning -m 'exit?' -B 'yes' 'swaymsg exit'
+
+bindsym $mod+$left focus left
+bindsym $mod+$down focus down
+bindsym $mod+$right focus right
+bindsym $mod+$up focus up
+
+bindsym $mod+1 workspace number 1
+bindsym $mod+2 workspace number 2
+
+gaps outer 4
+gaps inner 4
+
+bar {
+        swaybar_command waybar
+}

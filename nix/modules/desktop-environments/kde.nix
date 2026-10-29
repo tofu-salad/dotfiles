@@ -1,0 +1,36 @@
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+
+with lib;
+let
+  cfg = config.desktop.kde;
+in
+{
+  options.desktop.kde.enable = mkEnableOption "KDE";
+  config = mkIf cfg.enable {
+    display.manager = "sddm";
+    services.desktopManager.plasma6.enable = true;
+
+    environment.plasma6.excludePackages = with pkgs.kdePackages; [
+      discover
+      elisa
+      khelpcenter
+      konsole
+      plasma-browser-integration
+    ];
+
+    environment.systemPackages = with pkgs; [
+      foot
+      wl-clipboard
+    ];
+
+    fonts.packages = with pkgs; [
+      nerd-fonts.adwaita-mono
+      adwaita-fonts
+    ];
+  };
+}

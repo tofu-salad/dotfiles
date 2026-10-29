@@ -1,0 +1,51 @@
+include "rules.kdl"
+include "binds.kdl"
+
+spawn-at-startup "noctalia"
+
+
+gestures {
+        hot-corners {
+                off
+        }
+}
+
+input {
+        disable-power-key-handling
+        keyboard {
+                xkb {
+                        layout "us,es"
+                        options "grp:alt_shift_toggle,caps:escape"
+                }
+        }
+}
+
+output "HDMI-A-1" {
+        mode "1920x1080@74.973"
+        position x=0 y=0
+}
+
+layout {
+        center-focused-column "always"
+        always-center-single-column
+        gaps 8
+
+        default-column-width { proportion 0.8; }
+
+        focus-ring {
+                on
+                width 1
+                active-color   "#c6c6c6"
+        }
+}
+
+hotkey-overlay {
+        skip-at-startup
+}
+
+prefer-no-csd
+
+animations {
+        on
+        slowdown 0.3
+}

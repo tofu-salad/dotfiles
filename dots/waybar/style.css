@@ -1,0 +1,51 @@
+* {
+    border: none;
+    border-radius: 0;
+    min-height: 0px;
+}
+
+window#waybar {
+        background: rgba(0, 0, 0, 1);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+        color: white;
+}
+
+button:hover {
+        background: inherit;
+        box-shadow: none;
+}
+
+#workspaces button {
+        padding: 0;
+        background-color: transparent;
+        color: rgba(255, 255, 255, 0.5);
+        border: 1px solid transparent;
+}
+
+#workspaces button.focused, #workspaces button.active {
+        color: white;
+}
+
+#workspaces button:hover {
+        background: transparent;
+        border-top-color: rgba(255, 255, 255, 0.5);
+        border-left-color: rgba(255, 255, 255, 0.5);
+        border-right-color: rgba(255, 255, 255, 0.5);
+}
+
+#image.power {
+        padding-right: 4px;
+}
+
+#image.power, #image.search, #tray, #network, #wireplumber {
+        padding-left: 4px;
+}
+
+tooltip {
+        background: rgba(0, 0, 0, 1);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+tooltip label {
+        color: white;
+}

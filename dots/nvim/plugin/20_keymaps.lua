@@ -1,0 +1,20 @@
+vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
+
+vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
+vim.keymap.set("n", "<leader>]q", "<Cmd>cnext<CR>", { desc = "next item in the quicklist" })
+vim.keymap.set("n", "<leader>[q", "<Cmd>cprev<CR>", { desc = "previous item in the quicklist" })
+vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
+
+vim.keymap.set("v", "<leader>y", '"+y', { silent = true, desc = "[y]ank to system clipbloard" })
+vim.keymap.set("v", "<", "<gv", { silent = true, desc = "indent left without leaving visual mode [<]" })
+vim.keymap.set("v", ">", ">gv", { silent = true, desc = "indent right without leaving visual mode [>]" })
+vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "move text up in visual mode [J]" })
+vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { desc = "move text down in visual mode [K]" })
+vim.keymap.set("n", "<leader>e", "<cmd>Explore<CR>", { desc = "open netrw" })
+vim.keymap.set("n", "<C-d>", "<C-d>zz", { desc = "half page down (centered)" })
+vim.keymap.set("n", "<C-u>", "<C-u>zz", { desc = "half page up (centered)" })
+
+vim.keymap.set("n", "<C-h>", "<C-w><C-h>", { desc = "Move focus to the left window" })
+vim.keymap.set("n", "<C-l>", "<C-w><C-l>", { desc = "Move focus to the right window" })
+vim.keymap.set("n", "<C-j>", "<C-w><C-j>", { desc = "Move focus to the lower window" })
+vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
