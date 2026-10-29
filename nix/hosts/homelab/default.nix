@@ -119,7 +119,6 @@
       4001 # NFS
       4002 # NFS
     ];
-
   };
 
   environment.systemPackages = with pkgs; [
@@ -150,6 +149,7 @@
   services.jellyfin = {
     enable = true;
     openFirewall = true;
+    package = pkgs.unstable.jellyfin;
     hardwareAcceleration = {
       enable = true;
       device = "/dev/dri/renderD128";
