@@ -45,7 +45,7 @@
   environment.systemPackages = with pkgs; [
     # browsers
     google-chrome
-    unstable.brave-origin
+    firefox
     stremio-linux-shell
 
     # media
@@ -55,6 +55,9 @@
     # gui
     libreoffice
     qbittorrent
+
+    unstable.opencode-desktop
+    nodejs
   ];
 
   boot = {

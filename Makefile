@@ -1,52 +1,47 @@
+SHELL := bash
+.SHELLFLAGS := -eu -o pipefail -c
 .DEFAULT_GOAL := help
 
-.PHONY: help home laptop desktop homelab vm \
-        update/stable update/unstable \
-        update/all \
-        format
+HOSTS := laptop desktop homelab vm
 
-help:
+.PHONY: help home format update/all update/stable update/unstable \
+        $(HOSTS) $(addprefix hw/,$(HOSTS)) $(addprefix new/,$(HOSTS))
+
+help: ## Show this help
 	@echo "Available commands:"
-	@echo "  make home                - Build home-manager setup (tofu)"
-	@echo "  make desktop             - Rebuild system for desktop"
-	@echo "  make homelab             - Rebuild system for homelab"
-	@echo "  make laptop              - Rebuild system for laptop"
-	@echo "  make vm                  - Rebuild system for vm"
-	@echo
-	@echo "  make update/all          - Update all inputs"
-	@echo "  make update/stable       - Update nixpkgs"
-	@echo "  make update/unstable     - Update nixpkgs-unstable"
-	@echo
-	@echo "  make format  	           - Format nix files"
-format:
+	@grep -E '^[a-zA-Z_/-]+:.*## ' $(MAKEFILE_LIST) | \
+		awk 'BEGIN {FS = ":.*## "}; {printf "  make %-22s %s\n", $$1, $$2}'
+	@printf "  make %-22s %s\n" "<host>" "Rebuild system ($(HOSTS))"
+	@printf "  make %-22s %s\n" "hw/<host>" "Regenerate hardware-configuration.nix"
+	@printf "  make %-22s %s\n" "new/<host>" "Fresh install: hw/<host> then rebuild"
+
+format: ## Format nix files
 	find . -name '*.nix' -not -path './.git/*' -exec nix fmt {} +
-# home
-home:
+
+home: ## Build home-manager setup (tofu)
 	home-manager switch --flake .#tofu
-# hosts
-# regenerate the machine's hardware-configuration.nix, then rebuild
-laptop:
-	nixos-generate-config --show-hardware-config > nix/hosts/laptop/hardware-configuration.nix
-	sudo nixos-rebuild switch --flake .#laptop
 
-desktop:
-	nixos-generate-config --show-hardware-config > nix/hosts/desktop/hardware-configuration.nix
-	sudo nixos-rebuild switch --flake .#desktop
+# Regular rebuild
+$(HOSTS): %:
+	sudo nixos-rebuild switch --flake .#$*
 
-homelab:
-	nixos-generate-config --show-hardware-config > nix/hosts/homelab/hardware-configuration.nix
-	sudo nixos-rebuild switch --flake .#homelab
+# Regenerate hardware config (run on the target machine).
+# Writes to a temp file first so a failed generate can't leave an empty file.
+$(addprefix hw/,$(HOSTS)): hw/%:
+	@set -e; tmp=$$(mktemp); trap 'rm -f $$tmp' EXIT; \
+	sudo nixos-generate-config --show-hardware-config > $$tmp; \
+	cat $$tmp > nix/hosts/$*/hardware-configuration.nix
+	nix fmt nix/hosts/$*/hardware-configuration.nix
 
-vm:
-	nixos-generate-config --show-hardware-config > nix/hosts/vm/hardware-configuration.nix
-	sudo nixos-rebuild switch --flake .#vm
+# Fresh install on a new machine
+$(addprefix new/,$(HOSTS)): new/%: hw/%
+	$(MAKE) $*
 
-# updates
-update/stable:
+update/all: ## Update all inputs
+	nix flake update
+
+update/stable: ## Update nixpkgs
 	nix flake update nixpkgs
 
-update/unstable:
+update/unstable: ## Update nixpkgs-unstable
 	nix flake update nixpkgs-unstable
-
-update/all:
-	nix flake update
